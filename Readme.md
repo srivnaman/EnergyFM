@@ -1,25 +1,7 @@
 # EnergyFM: Pretrained Models for Energy Meter Data Analytics
 
-This repository provides a unified implementation of **Time Series Foundation Models (TSFMs)**, including:
 
-- **EnergyTSPulse**
-- **TSPulse**
-- **UNITS**
-- **MOMENT**
-- *(extendable to others)*
-
-Each model family supports:
-- **Forecasting**
-- **Anomaly Detection**
-- **Classification**
-
-And each task supports two operational modes:
-- **Zero-shot Inference**
-- **Finetuning**
-
-This consistent structure enables modular, scalable experimentation across TSFM architectures.
-
----
+We introduce EnergyFM, a set of pre-trained models specifically designed for energy meter analytics, supporting multiple downstream tasks such as energy load forecasting, anomaly detection, and classification. EnergyFM builds on IBM’s Tiny Time Mixers (TTM) and TSPulse as backbone architectures, which are lightweight, achieve state-of-the-art performance on several benchmarks, and are comparatively efficient to pre-train with modest compute resources. We adapt these architectures to the energy domain, naming them **Energy-TTM** and **Energy-TSPulse**, which are pre-trained on 1.26 billion hourly meter readings from 76,217 buildings across commercial and residential sectors, diverse building types and operational settings, and spanning multiple countries and climate zones.
 
 ### Python Version Support
 
@@ -54,6 +36,7 @@ git clone "https://github.com/ibm-granite/granite-tsfm.git"
 cd granite-tsfm
 ```
 
+
 ### Create Virtual Environment 
 ```bash
 python -m venv .venv
@@ -77,11 +60,13 @@ pip install ".[notebooks]"
 │       ├── zeroshot/
 │       └── finetune/
 │   
-├── TSPulse/
+├── EnergyTTM/
 │   ├── Forecasting/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
+│      ├── Pretraining/
+│      ├── zeroshot/
+│      └── finetune/
+│   
+├── TSPulse/
 │   ├── AnomalyDetection/
 │   │   ├── zeroshot/
 │   │   └── finetune/
@@ -91,10 +76,6 @@ pip install ".[notebooks]"
 │       └── finetune/
 │
 ├── UNITS/
-│   ├── Forecasting/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
 │   ├── AnomalyDetection/
 │   │   ├── zeroshot/
 │   │   └── finetune/
@@ -117,5 +98,4 @@ pip install ".[notebooks]"
 │       └── finetune/
 │
 └── README.md
-
 ```
