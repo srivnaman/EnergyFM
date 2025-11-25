@@ -252,9 +252,6 @@ def forecast_building(df):
         num_samples=num_samples
     )
 
-    # forecasts = list(tqdm(forecast_it, total=len(dataset), desc="Forecasting batches"))
-    # tss = list(tqdm(ts_it, total=len(dataset), desc="Ground truth"))
-
     #print(" forecast Done")
     forecasts = list(forecast_it)
     #print("Done")
@@ -333,8 +330,6 @@ def finetune_and_forecast_building(building_name, df, filename, dataset_name):#d
     train = SimpleDatasetBuilder(dataset=building_name, storage_path = f'Dataset/{dataset_name}/{filename}').load_dataset(model_finetune.train_transform_map)
     L.seed_everything(1 + trainer.logger.version, workers=True)
     
-    # val_dataset = SimpleEvalDatasetBuilder(dataset='ETTH_1_eval', storage_path = 'Dataset', prediction_length = 24, context_length = 168, offset = None
-    #                                        , windows = 179, distance = 24, patch_size = 32).load_dataset(model_finetune.val_transform_map)
     val =  tree_map(
                 lambda ds: ds.load_dataset(model_finetune.val_transform_map),
                 generate_eval_builders(dataset=building_name, storage_path = f'Dataset/{dataset_name}/{filename}', offset = 168, eval_length = 24,  prediction_lengths = [24], context_lengths = [168], patch_sizes=[32]))
@@ -365,10 +360,6 @@ def finetune_and_forecast_building(building_name, df, filename, dataset_name):#d
         num_samples=num_samples
     )
 
-    # forecasts = list(tqdm(forecast_it, total=len(dataset), desc="Forecasting batches"))
-    # tss = list(tqdm(ts_it, total=len(dataset), desc="Ground truth"))
-
-    #print(" forecast Done")
     forecasts = list(forecast_it)
     #print("Done")
     tss = list(ts_it)
@@ -427,11 +418,6 @@ def window(df):
 
 def process_building(train, test, building_name, filename, dataset): 
 
-    # train = windows_all_df[windows_all_df.index <= '2018-06-30 23:00:00']
-    # #test = windowed_df[windowed_df.index > '2017-06-30 23:00:00']
-    # test = windows_all_df[windows_all_df.item_id_no > train.iloc[-1,:].item_id_no]
-    # # train['item_id_no'] = train['item_id_no'].astype('object')
-    # # test['item_id_no'] = test['item_id_no'].astype('object')
     os.makedirs(f'Input/{dataset}/{filename}/{building_name}/', exist_ok = True)
     train.drop('item_id_no', axis = 1).to_csv(f'Input/{dataset}/{filename}/{building_name}/Train.csv')
     test.drop('item_id_no', axis = 1).to_csv(f'Input/{dataset}/{filename}/{building_name}/Test.csv')
@@ -461,19 +447,7 @@ def process_building(train, test, building_name, filename, dataset):
     return test_res, test_agg_metrics, test_ts_metrics, ft_res, ft_agg_metrics, ft_ts_metrics
 
 def process_file(filename, dataset):
-    # df_init = pd.read_csv(filename)
-    # df_init = df_init.set_index(['time'])
-    # df_init.index = pd.to_datetime(df_init.index)   
-    # n = os.path.basename(filename)
-    # building_name = n.split('_')[-1].replace('.csv', '')
-    # df_init['year'] = df_init.index.year
-    # training_set = df_init[df_init.year <= 2015]
-    # test_set = df_init[df_init.year > 2015]
-    # training_set = training_set.drop(columns='year')
-    # test_set = test_set.drop(columns='year')
-    # df_init = df_init.drop(columns='year')
-    # bs = df_init.columns[:-1].tolist()
-    
+
     df = pd.read_parquet(filename)
     save_filename = os.path.basename(filename).split(".")[0]
         
@@ -485,18 +459,6 @@ def process_file(filename, dataset):
     finetuned_agg_metrics_all = []
     finetuned_ts_metrics_all = []
     
-    # for year in df_init['year'].unique():
-        # b = list(filter(lambda x: str(year) in x, bs))
-        # df = df_init[df_init['year'] == year][b]
-        # df['month'] = df.index.month
-        # training_set = df[df.month <= 6]
-        # test_set = df[df.month > 6]
-        # training_set = training_set.drop(columns='month')
-        # test_set = test_set.drop(columns='month')
-        # df = df.drop(columns='month')
-    
-    # if df_init.shape[1] < 2:
-    #     return None
             
     print(datetime.now(), df.shape, flush=True)
     i = 0
@@ -524,11 +486,6 @@ def process_file(filename, dataset):
 
         if (train_data is None) or (test_data is None):
             continue
-        # print(datetime.now(), '#items', df1.item_id_no.max(), 'split', th)
-        
-        # train_data = window(training_set[[building_name]])
-        # test_data = window(test_set[[building_name]])
-
         if (i % 200 == 0) and (i != len(df.columns) - 1):
             test_res_all = []
             test_agg_metrics_all = []
@@ -573,24 +530,24 @@ def process_file(filename, dataset):
             test_res_all_df = pd.concat(test_res_all).round(6)
             test_res_all_df = test_res_all_df.reset_index()
             test_res_all_df = test_res_all_df.rename(columns={test_res_all_df.columns[0]: "timestamp" })
-            test_res_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/{save_filename}_{j}.csv', index=False)            
+            test_res_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/{save_filename}_{j}.csv', index=False)            
 
             test_ts_metrics_all_df = pd.concat(test_ts_metrics_all).round(6)
-            test_ts_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_ts_metrics_{save_filename}_{j}.csv', index=False)            
+            test_ts_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_ts_metrics_{save_filename}_{j}.csv', index=False)            
 
             test_agg_metrics_all_df = pd.concat(test_agg_metrics_all).round(6)            
-            test_agg_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_agg_metrics_{save_filename}_{j}.csv', index=False)            
+            test_agg_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_agg_metrics_{save_filename}_{j}.csv', index=False)            
 
             finetuned_res_all_df = pd.concat(finetuned_res_all).round(6)
             finetuned_res_all_df = finetuned_res_all_df.reset_index()
             finetuned_res_all_df = finetuned_res_all_df.rename(columns={finetuned_res_all_df.columns[0]: "timestamp" })
-            finetuned_res_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/{save_filename}_{j}', index=False)            
+            finetuned_res_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/{save_filename}_{j}', index=False)            
 
             finetuned_ts_metrics_all_df = pd.concat(finetuned_ts_metrics_all).round(6)
-            finetuned_ts_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_ts_metrics_{save_filename}_{j}.csv', index=False)            
+            finetuned_ts_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_ts_metrics_{save_filename}_{j}.csv', index=False)            
 
             finetuned_agg_metrics_all_df = pd.concat(finetuned_agg_metrics_all).round(6)            
-            finetuned_agg_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_agg_metrics_{save_filename}_{j}.csv', index=False)            
+            finetuned_agg_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_agg_metrics_{save_filename}_{j}.csv', index=False)            
 
     if (not test_res_all) or (not finetuned_res_all):
         return None
@@ -598,24 +555,24 @@ def process_file(filename, dataset):
     test_res_all_df = pd.concat(test_res_all).round(6)
     test_res_all_df = test_res_all_df.reset_index()
     test_res_all_df = test_res_all_df.rename(columns={test_res_all_df.columns[0]: "timestamp" })
-    test_res_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/{save_filename}_{j}.csv', index=False)            
+    test_res_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/{save_filename}_{j}.csv', index=False)            
 
     test_ts_metrics_all_df = pd.concat(test_ts_metrics_all).round(6)
-    test_ts_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_ts_metrics_{save_filename}_{j}.csv', index=False)            
+    test_ts_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_ts_metrics_{save_filename}_{j}.csv', index=False)            
 
     test_agg_metrics_all_df = pd.concat(test_agg_metrics_all).round(6)            
-    test_agg_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_agg_metrics_{save_filename}_{j}.csv', index=False)            
+    test_agg_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_test/{dataset}/test_agg_metrics_{save_filename}_{j}.csv', index=False)            
 
     finetuned_res_all_df = pd.concat(finetuned_res_all).round(6)
     finetuned_res_all_df = finetuned_res_all_df.reset_index()
     finetuned_res_all_df = finetuned_res_all_df.rename(columns={finetuned_res_all_df.columns[0]: "timestamp" })
-    finetuned_res_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/{save_filename}_{j}.csv', index=False)            
+    finetuned_res_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/{save_filename}_{j}.csv', index=False)            
 
     finetuned_ts_metrics_all_df = pd.concat(finetuned_ts_metrics_all).round(6)
-    finetuned_ts_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_ts_metrics_{save_filename}_{j}.csv', index=False)            
+    finetuned_ts_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_ts_metrics_{save_filename}_{j}.csv', index=False)            
 
     finetuned_agg_metrics_all_df = pd.concat(finetuned_agg_metrics_all).round(6)            
-    finetuned_agg_metrics_all_df.to_csv(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_agg_metrics_{save_filename}_{j}.csv', index=False)     
+    finetuned_agg_metrics_all_df.to_csv(f'./Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/finetuned_agg_metrics_{save_filename}_{j}.csv', index=False)     
     print("Finetuning completed for ", dataset, ".")  
 
     return test_res_all_df, test_ts_metrics_all_df, test_agg_metrics_all_df, finetuned_res_all_df, finetuned_ts_metrics_all_df, finetuned_agg_metrics_all_df
@@ -631,18 +588,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
     dtype = args.dtype
 
-    dir_list = os.listdir(f'/media/user/DATA/Dataset_V0.0/test/{dtype}/')
+    dir_list = os.listdir(f'./Dataset_V0.0/test/{dtype}/')
 
     for c, dataset in enumerate(dir_list):
         print(f'Model: Moirai Finetuning. Distribution: {dtype}. Dataset {dataset} is started for forecasting. {c+1}/{len(dir_list)}')
 
-        files_list = glob.glob(f'/media/user/DATA/Dataset_V0.0/test/{dtype}/{dataset}/*.parquet')
+        files_list = glob.glob(f'./Dataset/Forecasting/{dtype}/{dataset}/*.parquet')
         # fg = ['1', '3', '10', '25']
     
-        os.makedirs(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/', exist_ok = True)
-        os.makedirs(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_test/{dataset}/', exist_ok = True)
-        os.makedirs(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/', exist_ok = True)
-        os.makedirs(f'/media/user/DATA/Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/', exist_ok = True)
+        os.makedirs(f'./Results/test/{dtype}/moirai-finetune/forecasts_test/{dataset}/', exist_ok = True)
+        os.makedirs(f'./Results/test/{dtype}/moirai-finetune/results_test/{dataset}/', exist_ok = True)
+        os.makedirs(f'./Results/test/{dtype}/moirai-finetune/forecasts_finetuned/{dataset}/', exist_ok = True)
+        os.makedirs(f'./Results/test/{dtype}/moirai-finetune/results_finetuned/{dataset}/', exist_ok = True)
 
         for filename in files_list:
             print(datetime.now(), filename)
@@ -654,22 +611,4 @@ if __name__ == '__main__':
 
     torch.cuda.empty_cache()
     
-    # for d in d_list:
-    #     print("Dataset - ", d)
-    #     files_list = glob.glob(f'/home/user/New_Buildings_Datasets/Test/{d}/*.csv')
-
-    #     dataset = f'{d}-moirai'
-    #     os.makedirs(f'forecasts_test/{dataset}/', exist_ok = True)
-    #     os.makedirs(f'results_test/{dataset}/', exist_ok = True)
-    #     os.makedirs(f'forecasts_finetuned/{dataset}/', exist_ok = True)
-    #     os.makedirs(f'results_finetuned/{dataset}/', exist_ok = True)
-        
-    #     for filename in files_list:
-    #         print(datetime.now(), filename)
-    #         results = process_file(filename)
-    #         # if results is not None:
-    #         #     results.to_csv(f'../forecasts/{dataset}/{os.path.basename(filename)}', index=False)
-    #         print('')      
-
-
 

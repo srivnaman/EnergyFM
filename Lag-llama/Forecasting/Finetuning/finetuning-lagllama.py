@@ -389,12 +389,12 @@ if __name__ == "__main__":
 
     # os.makedirs(f'/home/user/energygpt/Results_nurips/lagllama/forecasts/{dataset}/', exist_ok=True)
     # os.makedirs(f'/home/user/energygpt/Results_nurips/lagllama/results/{dataset}/', exist_ok=True)
-    dir_list = os.listdir(f'/media/user/DATA/Dataset_V0.0/test/{dtype}/')
+    dir_list = os.listdir(f'./Dataset/Forecasting{dtype}/')
 
     for c, dataset in enumerate(dir_list):
         print(f'Model: Lag-Llama. Distribution: {dtype}. Dataset {dataset} is started for forecasting. {c+1}/{len(dir_list)}')
 
-        files_list = glob.glob(f'/media/user/DATA/Dataset_V0.0/test/{dtype}/{dataset}/*.parquet')
+        files_list = glob.glob(f'./Dataset/Forecasting/{dtype}/{dataset}/*.parquet')
         # fg = ['1', '3', '10', '25']
     
         os.makedirs(f'/media/user/DATA/Results/test/{dtype}/lag-llama-finetune/forecasts_finetuned/{dataset}/', exist_ok = True)

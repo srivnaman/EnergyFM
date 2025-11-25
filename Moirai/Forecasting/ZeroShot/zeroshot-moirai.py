@@ -209,7 +209,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     dtype = args.dtype
 
-    dir_list = os.listdir(f'/media/user/DATA21/energygpt/Moirai/test/{dtype}/')
+    dir_list = os.listdir(f'./Dataset/Forecasting/{dtype}/')
     #dir_list = ['BDG-2']
 
     for c, dataset in enumerate(dir_list):

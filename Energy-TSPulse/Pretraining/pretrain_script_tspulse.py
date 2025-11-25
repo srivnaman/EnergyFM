@@ -412,11 +412,8 @@ def main():
     # args.decoder_d_model = args.d_model
     # args.decoder_num_layers = 2
     # args.learning_rate = 1e-4
-    args.batch_size = 72
+    args.batch_size = 30000
     
-    # args.num_epochs = 10
-    # args.early_stopping = True
-    # args.num_workers = 8
     logger.info("="*50)
     logger.info("TSPulse Dual-Domain Pretraining Configuration")
     logger.info("="*50)
@@ -435,19 +432,13 @@ def main():
     total_windows = 1221515699
     logger.info(f"Total sliding‐window samples: {total_windows:,}")
 
-    # total_samples = estimate_total_samples(
-    #     args.data_root_path,
-    #     args.context_length,d
-    #     args.forecast_length,
-    # )
-    # logger.info(f"Estimated total samples: {total_samples:,}")
     args.number_of_gpus = 2
     args.steps_per_epoch = total_windows // (args.batch_size * args.number_of_gpus)
     desired_epochs = 10
     args.max_steps = args.steps_per_epoch * desired_epochs
 
     # OPTION 1: Use with your energy dataset
-    args.data_root_path = "/home/samy/Abhinav/implementations-naman/Datasets/curr_train"
+    args.data_root_path = "./Dataset/Pretraining"
     args.save_dir = "./tspulse_pretrained_energy"
     os.makedirs(args.save_dir, exist_ok=True)
     if hasattr(args, 'data_root_path') and args.data_root_path:
