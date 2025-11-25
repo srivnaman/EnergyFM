@@ -10,12 +10,6 @@ EnergyTSPulse is a Time-Series Foundation Model (TSFM) supporting:
 
 ##  Zero-Shot Inference
 
-### Forecasting
-```
-python EnergyTSPulse/Forecasting/zeroshot/infer.py \
-    --input data/sample.csv
-```
-
 ### Anomaly Detection
 ```
 python EnergyTSPulse/AnomalyDetection/zeroshot/infer.py \
