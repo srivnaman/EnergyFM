@@ -35,21 +35,9 @@ By default, all experiments follow the multi-task setting where one UniTS model 
 
 ### 3. Train and evaluate model
 
-#### 1. Multi-task learning on forecasting and classification tasks:
+#### 1. Few-shot transfer learning on classification tasks:
 
-- Pretraining + Prompt learning
-```
-bash ./scripts/pretrain_prompt_learning/UniTS_pretrain_x128.sh
-```
-
-- Supervised learning
-```
-bash ./scripts/supervised_learning/UniTS_supervised.sh
-```
-
-#### 2. Few-shot transfer learning on new forecasting and classification tasks:
-
-**Note: Please follow the instruction in following training scripts to get the pretrained ckpt first.** 
+**Note: Please follow the instructions inthe  following training scripts to get the pretrained ckpt first.** 
 
 - Finetuning
 ```
@@ -57,47 +45,11 @@ bash ./scripts/supervised_learning/UniTS_supervised.sh
 bash ./scripts/few_shot_newdata/UniTS_finetune_few_shot_newdata_pct20.sh
 ```
 
-- Prompt tuning
-```
-# please set the pretrianed model path in the script.
-bash ./scripts/few_shot_newdata/UniTS_prompt_tuning_few_shot_newdata_pct20.sh
-```
-
 #### 3. Few-shot transfer learning on anomaly detection tasks:
 - Finetuning
 ```
 # please set the pretrianed model path in the script.
 bash ./scripts/few_shot_anomaly_detection/UniTS_finetune_few_shot_anomaly_detection.sh
-```
-- Prompt tuning
-```
-# please set the pretrianed model path in the script.
-bash ./scripts/few_shot_anomaly_detection/UniTS_prompt_tuning_few_shot_anomaly_detection.sh
-```
-
-#### 4. Few-shot transfer learning on imputation tasks:
-- Finetuning
-```
-# please set the pretrianed model path in the script.
-bash ./scripts/few_shot_imputation/UniTS_finetune_few_shot_imputation_mask050.sh
-```
-
-- Prompt tuning
-```
-# please set the pretrianed model path in the script.
-bash ./scripts/few_shot_imputation/UniTS_prompt_tuning_few_shot_imputation_mask050.sh
-```
-
-#### 5. Zero-shot learning on new forecasting length:
-```
-# please set the pretrianed model path in the script.
-bash ./scripts/zero_shot/UniTS_forecast_new_length_unify.sh
-```
-
-#### 6. Zero-shot learning on new forecasting datasets:
-```
-# A special verison of UniTS with shared prompt/mask tokens needs to be trained for this setting.
-bash ./scripts/zero_shot/UniTS_zeroshot_newdata.sh
 ```
 
 ## Use UniTS on your own data.
