@@ -5,26 +5,6 @@ Uni2TS is a PyTorch based library for research and applications related to Time 
 This library aims to provide a unified solution to large-scale pre-training of Universal Time Series Transformers.
 Uni2TS also provides tools for fine-tuning, inference, and evaluation for time series forecasting.
 
-## 🎉 What's New
-
-* Mar 2024: Release of Uni2TS library, along with [Moirai-1.0-R](https://huggingface.co/collections/Salesforce/moirai-10-r-models-65c8d3a94c51428c300e0742) and [LOTSA data](https://huggingface.co/datasets/Salesforce/lotsa_data/)!
-
-## ✅ TODO
-
-- [ ] Improve docstrings and documentation
-
-[//]: # (- [ ] Support more pre-training paradigms)
-
-[//]: # (  - [ ] &#40;Non-&#41;Contrastive learning)
-
-[//]: # (  - [ ] Masked Autoencoder)
-
-[//]: # (  - [ ] Next token prediction)
-
-[//]: # (- [ ] Decoder Transformer)
-
-[//]: # (- [ ] Data augmentations - down sampling, subsampling, aggregation)
-
 ## ⚙️ Installation
 
 1. Clone repository:
@@ -205,35 +185,4 @@ python -m cli.eval \
   data=lsf_test \
   data.dataset_name=ETTh1 \
   data.prediction_length=96 
-```
-
-### Pre-training
-Now, let's see how you can pre-train your own model. 
-We'll start with preparing the data for pre-training first, by downloading the [Large-scale Open Time Series Archive (LOTSA data)](https://huggingface.co/datasets/Salesforce/lotsa_data/).
-Assuming you've already createed a `.env` file, run the following commands.
-```shell
-huggingface-cli download Salesforce/lotsa_data --repo-type=dataset --local-dir PATH_TO_SAVE
-echo "LOTSA_V1_PATH=PATH_TO_SAVE" >> .env
-```
-
-Then, we can simply run the following script to start a pre-training job. 
-See the [relevant](cli/pretrain.py) [files](cli/conf/pretrain) on how to further customize the settings.
-```shell
-python -m cli.pretrain \
-  run_name=first_run \
-  model=moirai_small \
-  data=lotsa_v1_unweighted
-```
-
-## 👀 Citing Uni2TS
-
-If you're using Uni2TS in your research or applications, please cite it using this BibTeX:
-
-```markdown
-@article{woo2024unified,
-  title={Unified Training of Universal Time Series Forecasting Transformers},
-  author={Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Sahoo, Doyen},
-  journal={arXiv preprint arXiv:2402.02592},
-  year={2024}
-}
 ```
