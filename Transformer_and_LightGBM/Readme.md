@@ -57,49 +57,6 @@ If running the LightGBM baseline, you will need to install LightGBM.
 1. Follow instructions [here](https://pypi.org/project/lightgbm/) to install `lightgbm` for your OS. 
 2. Then install `skforecast` with `pip install skforecast==0.8.1`.
 
-
-## Download the datasets and metadata
-
-The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total, but the pretraining data is ~110GB in size.
-
-The pretraining data is divided into 4 compressed files
-- `comstock_amy2018.tar.gz`
-- `comstock_tmy3.tar.gz`
-- `resstock_amy2018.tar.gz`
-- `resstock_tmy3.tar.gz`
-
-and one compressed file for the metadata
-- `metadata.tar.gz`
-
-The evaluation datasets are compressed into a single file
-- `BuildingsBench.tar.gz`
-
-Download all files to a folder on a storage device with at least 250GB of free space. Then, decompress all of the downloaded files. There will be a new subdirectory called `BuildingsBench`. **This is the data directory, which is different than the Github code repository, although both folders are named "BuildingsBench".**
-
-
-### Setting environment variables
-
-Set the environment variable `BUILDINGS_BENCH` to the path where the data directory `BuildingsBench` is located (created when untarring the data files). **This is not the path to this code repository.**
-
-```bash
-export BUILDINGS_BENCH=/path/to/BuildingsBench
-```
-
-#### Wandb 
-
-If using `wandb`, set the following:
-
-- `WANDB_ENTITY`: your wandb username
-- `WANDB_PROJECT`: the name of your wandb project for this benchmark
-
-## Run tests
-
-Verify your local installation by running unit tests from the base directory:
-
-```bash
-python -m unittest
-```
-
 ## Usage
 
 ### Loading a benchmark dataset
@@ -124,51 +81,6 @@ for building_name, building in buildings_dataset_generator:
         # context = x[:, :168], 1 week hourly of context
         # target = x[:, -24:], 24 hour target prediction
         # ...
-```
-
-
-### Pretraining 
-
-#### Without SLURM
-
-The script `pretrain.py` is implemented with PyTorch `DistributedDataParallel` so it must be launched with `torchrun` from the command line and the argument `--disable_slurm` must be passed.
-See `./scripts/pretrain.sh` for an example. 
-
-
-```bash
-#!/bin/bash
-
-export WORLD_SIZE=1
-NUM_GPUS=1
-
-torchrun \
-    --nnodes=1 \
-    --nproc_per_node=$NUM_GPUS \
-    --rdzv-backend=c10d \
-    --rdzv-endpoint=localhost:0 \
-    scripts/pretrain.py --model TransformerWithGaussian-S --disable_slurm
-```
-
-The argument `--disable_slurm` is not needed if you are running this script on a Slurm cluster as a batch job. 
-
-This script will automatically log outputs to `wandb` if the environment variables `WANDB_ENTITY` and `WANDB_PROJECT` are set. Otherwise, pass the argument `--disable_wandb` to disable logging to `wandb`.
-
-#### With SLURM
-
-To launch pretraining as a SLURM batch job:
-
-```bash
-export WORLD_SIZE=$(($SLURM_NNODES * $SLURM_NTASKS_PER_NODE))
-echo "WORLD_SIZE="$WORLD_SIZE
-export MASTER_PORT=$(expr 10000 + $(echo -n $SLURM_JOBID | tail -c 4))
-
-echo "NODELIST="${SLURM_NODELIST}
-master_addr=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
-export MASTER_ADDR=$master_addr
-echo "MASTER_ADDR="$MASTER_ADDR
-
-srun python3 scripts/pretrain.py \
-        --model TransformerWithGaussian-S
 ```
 
 ### Zero-shot STLF
@@ -241,70 +153,3 @@ The TOML config file should look something like this:
 # override any of the default transfer_learning argparse args here
 ```
 See `./buildings_bench/configs/TransformerWithTokenizer-S.toml` for an example.
-
-
-## BuildingsBench Leaderboard
-
-Metrics:
-
-- NRMSE: Normalized Root Mean Squared Error (%)
-- RPS: Ranked Probability Score
-  - Gaussian Continuous Ranked Probability Score for Gaussian models
-  - Categorical Discrete Ranked Probability Score for token-based models
-
-PyTorch checkpoint files for all trained models can be downloaded in a single tar file [here](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz).
-We provide a tutorial on how to use these pretrained models [here](https://github.com/NREL/BuildingsBench/blob/main/tutorials/pretrained_models.ipynb).
-
-### Zero-shot STLF
-
-Eval over all real buildings for all available years. Lower is better. Individual model checkpoints are available via AWS S3 for download by clicking on the model name.
-
-| Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS | 
-| --- | --- | --- | --- | --- |
-| [Transformer-L (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Gaussian_L.pt) | 13.31 | 5.23 | 79.34 | 0.072 | 
-| [Transformer-M (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Gaussian_M.pt) | 13.28 | 5.21 | 92.60 | 0.098 |
-| [Transformer-S (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Gaussian_S.pt) | 13.97 | 5.66 | 102.30 | 0.118|
-| [Transformer-L (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Tokens_L.pt) | 14.46 | 5.62 | 95.34 | 0.152 |
-| [Transformer-M (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Tokens_M.pt) | 14.05 | 5.46 | 100.49 | 0.203 |
-| [Transformer-S (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.1.0/checkpoints/Transformer_Tokens_S.pt) | 14.56 | 5.49 | 101.18 |  0.085 |
-| Persistence Ensemble | 16.68| 5.88 | 77.88 | 0.063 |
-| Previous Day Persistence | 16.96 | - | 98.41 | - |
-| Previous Week Persistence | 19.39 | - | 99.77 | - |
-
-### Transfer Learning for STLF
-
-Results are over a sub-sample of 100 residential and 100 commercial buildings--see the list of buildings in the datasets metadata directory: `BuildingsBench/metadata/transfer_learning_residential_buildings.csv` and `BuildingsBench/metadata/transfer_learning_commercial_buildings.csv`.
-Models are provided with the first 6 months of consumption data for fine-tuning and tested with a 24-hour sliding window on the next 6 months.
-These results are for the Transformer-L models.
-
-| Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS |
-| --- | --- | --- | --- | --- |
-| **Pretrained + Fine-tuned** | | | | |
-| Transformer (Gaussian) | 12.96 | 4.37 | 77.20 | 0.057 |
-| Transformer (Tokens) |  14.07 | 4.99 | 94.53 | 0.137 |
-| **Fine-tuned from random weights** | | | | |
-| Transformer (Gaussian) | 37.21 |15.94 | 92.99 | 0.081 |
-| Transformer (Tokens) | 50.12 | 26.89 | 105.65 | 16.36 |
-| LightGBM | 16.02 | - | 80.07 | - |
-| DLinear | 23.41 | - | 87.89 | - | 
-| Linear Regression | 25.18 | - | 89.98 | - |
-| RNN | 41.79 | 15.28 | 96.75 | 0.078 | 
-| **Persistence** | | | | |
-| Persistence Ensemble | 16.80 | 5.97 | 78.54 | 0.057 |
-| Previous Day Persistence | 16.54 | - | 98.35 | - |
-| Previous Week Persistence | 18.93 | - | 100.20 | - |
-
-## Citation
-
-If you use BuildingsBench in your research, please cite our preprint:
-
-```
-@article{emami2023buildingsbench,
-  title={Buildingsbench: A large-scale dataset of 900k buildings and benchmark for short-term load forecasting},
-  author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
-  journal={Advances in Neural Information Processing Systems},
-  volume={36},
-  pages={19823--19857},
-  year={2023}
-}
-```
