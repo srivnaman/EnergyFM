@@ -8,6 +8,8 @@ We introduce EnergyFM, a set of pre-trained models specifically designed for ene
 The following Python versions are supported:
 **Python 3.10**  **Python 3.11** **Python 3.12**
 
+#### The final model checkpoint will be published on Huggingface
+
 ---
 
 # Getting Started
