@@ -98,6 +98,8 @@ pip install ".[notebooks]"
 │   └── Classification/
 │       ├── zeroshot/
 │       └── finetune/
+├── Notebooks/          ## Notebooks to test EnergyFMs
+│  
 │
 └── README.md
 ```
