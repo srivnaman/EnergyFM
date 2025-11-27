@@ -30,6 +30,9 @@ Please choose the TSFM model you want to work with (e.g., EnergyTSPulse, UNITS, 
 
 
 
+Notebooks/ → Notebooks to tryout EnergyFMs
+
+
 ##  Installation
 
 ### Clone the repository  
