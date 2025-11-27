@@ -1,14 +1,14 @@
 # EnergyFM: Pretrained Models for Energy Meter Data Analytics
 
 
-We introduce EnergyFM, a set of pre-trained models specifically designed for energy meter analytics, supporting multiple downstream tasks such as energy load forecasting, anomaly detection, and classification. EnergyFM builds on IBM’s Tiny Time Mixers (TTM) and TSPulse as backbone architectures, which are lightweight, achieve state-of-the-art performance on several benchmarks, and are comparatively efficient to pre-train with modest compute resources. We adapt these architectures to the energy domain, naming them **Energy-TTM** and **Energy-TSPulse**, which are pre-trained on 1.26 billion hourly meter readings from 76,217 buildings across commercial and residential sectors, diverse building types and operational settings, and spanning multiple countries and climate zones.
+We introduce EnergyFM, a set of pre-trained models specifically designed for energy meter analytics, supporting multiple downstream tasks such as energy load forecasting, anomaly detection, and classification. EnergyFM builds on IBM’s Tiny Time Mixers (TTM) and TSPulse as backbone architectures, which are lightweight, achieve state-of-the-art performance on several benchmarks, and are comparatively efficient to pre-train with modest compute resources. We adapt these architectures to the energy domain, naming them **Energy-TTM** and **Energy-TSPulse**, which are pre-trained on 1.26 billion hourly meter readings from 76,217 buildings across commercial and residential sectors, diverse building types and operational settings, and spanning multiple countries and climate zones. The dataset can be downloaded from [here](https://drive.google.com/drive/folders/1jW7QJJv9U8cY5GFU6OIqF49e9g4X-ovp?usp=sharing)
 
 ### Python Version Support
 
 The following Python versions are supported:
 **Python 3.10**  **Python 3.11** **Python 3.12**
 
-#### The final model checkpoint will be published on Huggingface
+#### The final model checkpoint and pretraining dataset will be published on Huggingface
 
 ---
 
@@ -77,7 +77,7 @@ pip install ".[notebooks]"
 │       ├── zeroshot/
 │       └── finetune/
 │
-├── UNITS/
+├── UNITS/                          
 │   ├── AnomalyDetection/
 │   │   ├── zeroshot/
 │   │   └── finetune/
