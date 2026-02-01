@@ -30,8 +30,8 @@ from transformers import Trainer, TrainingArguments, set_seed, EarlyStoppingCall
 from torch.utils.data import ConcatDataset, Dataset, DataLoader
 
 
-from tinytimemixer.configuration_tinytimemixer import TinyTimeMixerConfig
-from tinytimemixer.modeling_tinytimemixer import TinyTimeMixerForPrediction
+from tsfm_public.models.tinytimemixer.configuration_tinytimemixer import TinyTimeMixerConfig
+from tsfm_public.models.tinytimemixer.modeling_tinytimemixer import TinyTimeMixerForPrediction
 
 from tsfm_public.toolkit.dataset import PretrainDFDataset, ForecastDFDataset
 from tsfm_public.toolkit.time_series_preprocessor import TimeSeriesPreprocessor

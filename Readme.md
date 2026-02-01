@@ -1,108 +1,130 @@
-# EnergyFM: Pretrained Models for Energy Meter Data Analytics
+# EnergyFM
 
+EnergyFM is a research framework for **pretrained time series foundation models**
+applied to **energy meter data**. It provides pretrained models, example pipelines,
+and tutorial notebooks for **forecasting, anomaly detection, and classification**
+on large-scale smart meter datasets.
 
-We introduce EnergyFM, a set of pre-trained models specifically designed for energy meter analytics, supporting multiple downstream tasks such as energy load forecasting, anomaly detection, and classification. EnergyFM builds on IBM’s Tiny Time Mixers (TTM) and TSPulse as backbone architectures, which are lightweight, achieve state-of-the-art performance on several benchmarks, and are comparatively efficient to pre-train with modest compute resources. We adapt these architectures to the energy domain, naming them **Energy-TTM** and **Energy-TSPulse**, which are pre-trained on 1.26 billion hourly meter readings from 76,217 buildings across commercial and residential sectors, diverse building types and operational settings, and spanning multiple countries and climate zones. The dataset can be downloaded from [here](https://drive.google.com/drive/folders/1jW7QJJv9U8cY5GFU6OIqF49e9g4X-ovp?usp=sharing)
+EnergyFM is designed to support:
+- Zero-shot inference on unseen buildings and regions
+- Fine-tuning for downstream energy analytics tasks
+- Reproducible research and benchmarking
 
-### Python Version Support
+This repository accompanies the paper:
 
-The following Python versions are supported:
-**Python 3.10**  **Python 3.11** **Python 3.12**
+**EnergyFM: Pretrained Models for Energy Meter Data Analytics**  
+*ACM e-Energy 2026*
 
-#### The final model checkpoint and pretraining dataset will be published on Huggingface
 
 ---
 
-# Getting Started
+## Models Included
 
+EnergyFM currently includes two pretrained models, each designed for a distinct
+class of energy time series tasks.
 
-We separate the implementations of each Time-Series Foundation Model (TSFM) into individual folders.
-Inside each TSFM folder, the code is further divided into downstream tasks: Forecasting, Anomaly Detection and Classification
+| Model | Primary Use | Supported Tasks |
+|------|------------|-----------------|
+| **Energy-TTM** | Forecasting | Short-term load forecasting |
+| **Energy-TSPulse** | Representation learning | Classification, anomaly detection |
 
-Each task contains:
+---
 
-zeroshot/ → zero-shot evaluation
+## Repository Organization
 
-finetune/ → task-specific training
+The repository is organized **by model**, with task-specific pipelines contained
+within each model directory.
 
-pretrained/ (optional) → pretrained checkpoints
+```text
+Dataset              # Sample from Datasets used in the orignal paper
+Energy-TTM/          # Energy-TTM (forecasting)
+Energy-TSPulse/      # Energy-TSPulse (classification, anomaly detection)
+Notebooks/        # Tutorial notebooks and example workflows
 
-Please choose the TSFM model you want to work with (e.g., EnergyTSPulse, UNITS, MOMENT, TimesFM, etc.).
+````
 
+---
 
+## Getting Started
 
-Notebooks/ → Notebooks to tryout EnergyFMs
+If you are new to EnergyFM, we recommend the following workflow:
 
+1. Start with the **overview and setup notebook** in `notebooks/`
+2. Run a **zero-shot forecasting example** with Energy-TTM
+3. Explore **anomaly detection or classification** with Energy-TSPulse
 
-##  Installation
+The notebooks are intended to demonstrate recommended usage patterns with minimal
+setup.
 
-### Clone the repository  
+---
+
+## Installation
+
+Clone the repository:
+
 ```bash
-git clone "https://github.com/ibm-granite/granite-tsfm.git" 
-cd granite-tsfm
+git clone https://github.com/srivnaman/EnergyFM.git
+cd EnergyFM
 ```
 
+Install dependencies:
 
-### Create Virtual Environment 
 ```bash
-python -m venv .venv
-source .venv/bin/activate     # Linux/macOS
-# .venv\Scripts\activate      # Windows
-```
-### Install Required Dependancies
-```bash
-pip install ".[notebooks]"
+pip install -r requirements.txt
 ```
 
-## Directory Structure
+---
+
+## Dependencies
+
+EnergyFM builds on IBM’s **Granite Time Series Foundation Models (TSFM)**, which
+provide the core TSFM architectures and Hugging Face integration.
+
+* Granite TSFM GitHub: [https://github.com/ibm-granite/granite-tsfm](https://github.com/ibm-granite/granite-tsfm)
+* Granite TSFM Wiki: [https://github.com/ibm-granite/granite-tsfm/wiki](https://github.com/ibm-granite/granite-tsfm/wiki)
+
+---
+
+## Datasets
+
+This repository does **not** host full datasets.
+
+* Small samples may be included for demonstration purposes
+* Full datasets used for pretraining and evaluation are released separately
+
+Links to datasets and pretrained weights are provided via Hugging Face.
+
+
+---
+
+## Issues
+
+Please report bugs or questions via GitHub Issues:
+
+[https://github.com/srivnaman/EnergyFM/issues](https://github.com/srivnaman/EnergyFM/issues)
+
+---
+
+## Citation
+
+If you use EnergyFM in your research, please cite:
+
+```bibtex
+@article{energyfm2026,
+  title   = {EnergyFM: Pretrained Models for Energy Meter Data Analytics},
+  author  = {Arjunan, Pandarasamy and Srivastava, Naman and Kumar, Kajeeth
+             and Jati, Arindam and Ekambaram, Vijay and Dayama, Pankaj},
+  journal = {ACM e-Energy},
+  year    = {2026}
+}
 ```
-.
-├── EnergyTSPulse/
-│   ├── AnomalyDetection/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
-│   └── Classification/
-│       ├── zeroshot/
-│       └── finetune/
-│   
-├── EnergyTTM/
-│   ├── Forecasting/
-│      ├── Pretraining/
-│      ├── zeroshot/
-│      └── finetune/
-│   
-├── TSPulse/
-│   ├── AnomalyDetection/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
-│   └── Classification/
-│       ├── zeroshot/
-│       └── finetune/
-│
-├── UNITS/                          
-│   ├── AnomalyDetection/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
-│   └── Classification/
-│       ├── zeroshot/
-│       └── finetune/
-│
-├── MOMENT/
-│   ├── Forecasting/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
-│   ├── AnomalyDetection/
-│   │   ├── zeroshot/
-│   │   └── finetune/
-│   │
-│   └── Classification/
-│       ├── zeroshot/
-│       └── finetune/
-├── Notebooks/          ## Notebooks to test EnergyFMs
-│  
-│
-└── README.md
-```
+
+---
+
+## Notice
+
+EnergyFM builds on IBM Granite TSFM models available through the Hugging Face
+`transformers` ecosystem. As the project evolves, code and documentation may
+change accordingly.
+
+

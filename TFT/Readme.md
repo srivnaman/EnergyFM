@@ -1,1 +1,0 @@
-We adopt the Temporal Fusion Transformer model from the official [TimeXer GitHub repository](https://github.com/thuml/TimeXer), which provides the implementation for transformer-based time series forecasting with exogenous variables.
