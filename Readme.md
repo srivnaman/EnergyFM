@@ -1,6 +1,6 @@
 # EnergyFM
 
-EnergyFM is a research framework for **pretrained time series foundation models**
+EnergyFM are **pretrained time series foundation models**
 applied to **energy meter data**. It provides pretrained models, example pipelines,
 and tutorial notebooks for **forecasting, anomaly detection, and classification**
 on large-scale smart meter datasets.
@@ -45,16 +45,6 @@ Notebooks/        # Tutorial notebooks and example workflows
 
 ---
 
-## Getting Started
-
-If you are new to EnergyFM, we recommend the following workflow:
-
-1. Start with the **overview and setup notebook** in `notebooks/`
-2. Run a **zero-shot forecasting example** with Energy-TTM
-3. Explore **anomaly detection or classification** with Energy-TSPulse
-
-The notebooks are intended to demonstrate recommended usage patterns with minimal
-setup.
 
 ---
 
@@ -72,6 +62,14 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+
+## Getting Started
+
+Zero Shot Forecasting with EnergyTTM []()
+Zero Shot Anomaly Detection with EnergyTSPulse []()
+Appliance Classification with EnergyTSPulse []()
+
 
 ---
 
