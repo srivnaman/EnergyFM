@@ -15,7 +15,6 @@ This repository accompanies the paper:
 **EnergyFM: Pretrained Models for Energy Meter Data Analytics**  
 *ACM e-Energy 2026*
 
-
 ---
 
 ## Models Included
@@ -27,6 +26,24 @@ class of energy time series tasks.
 |------|------------|-----------------|
 | **Energy-TTM** | Forecasting | Short-term load forecasting |
 | **Energy-TSPulse** | Representation learning | Classification, anomaly detection |
+
+---
+
+## 📊 Energy Benchmark Leaderboard
+
+To compare EnergyFM with other state-of-the-art time series foundation models
+for energy analytics, please visit our public benchmark leaderboard:
+
+👉 **Energy Benchmark Leaderboard**  
+https://huggingface.co/spaces/Thanvish07/EB_Leaderboard
+
+The leaderboard provides standardized evaluations across multiple energy
+forecasting, anomaly detection, and classification tasks, allowing users to
+directly compare EnergyFM against other models from the literature.
+
+We encourage users to explore the leaderboard to better understand how
+EnergyFM performs relative to alternative TSFMs under consistent evaluation
+settings.
 
 ---
 
@@ -122,11 +139,11 @@ If you use EnergyFM in your research, please cite:
 ```
 
 ---
-
+<!-- 
 ## Notice
 
 EnergyFM builds on IBM Granite TSFM models available through the Hugging Face
 `transformers` ecosystem. As the project evolves, code and documentation may
-change accordingly.
+change accordingly. -->
 
 
