@@ -66,10 +66,14 @@ pip install -r requirements.txt
 
 ## Getting Started
 
-Zero Shot Forecasting with EnergyTTM []()
-Zero Shot Anomaly Detection with EnergyTSPulse []()
-Appliance Classification with EnergyTSPulse []()
+- **Zero Shot Forecasting with Energy-TTM**  
+  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/Energy-TTM-zeroshot.ipynb)
 
+- **Zero Shot Anomaly Detection with Energy-TSPulse**  
+  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/Energy-tspulse_anomaly_detection_zeroshot.ipynb)
+
+- **Appliance Classification with Energy-TSPulse**  
+  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/classification_EnergyTSPulse_finetuning.ipynb)
 
 ---
 
