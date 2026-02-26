@@ -86,10 +86,10 @@ pip install -r requirements.txt
   [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy-TTM-zeroshot.ipynb)
 
 - **Zero-Shot Anomaly Detection with Energy-TSPulse**  
-  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy_tspulse_anomaly_detection_zeroshot.ipynb)
+  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy-tspulse_anomaly_detection_zeroshot.ipynb)
 
 - **Fine-Tuning Energy-TSPulse for Anomaly Detection**  
-  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy_tspulse_anomaly_detection_finetune.ipynb)
+  [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy-tspulse_anomaly_detection_finetune.ipynb)
 
 - **Appliance Classification with Energy-TSPulse (Fine-Tuning)**  
   [Open Notebook](https://github.com/srivnaman/EnergyFM/blob/main/Notebooks/energy_tspulse_classification_finetuning.ipynb)
